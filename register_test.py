@@ -18,10 +18,11 @@ URL = "https://adselect.org/register"   # your registration page
 SPONSOR = "trivo08"      # must be a real sponsor on your site
 COUNTRY = "Zimbabwe"
 PHONE_PREFIX_LEN = 0                     # the +263 is already shown by the page
-EMAIL_DOMAIN = "example.com"             # use a domain you control if the server validates it
+EMAIL_DOMAIN = "example.co.zw"             # use a domain you control if the server validates it
 SUCCESS_TEXT = "success"                 # text that appears on success (case-insensitive)
 SUCCESS_URL_PART = ""                    # or a URL fragment after redirect, e.g. "/dashboard"
-BATCH_SIZE = 100                          # registrations per batch
+HEADLESS = True                          # True on a server with no screen, False on your PC to watch it
+BATCH_SIZE = 20                          # registrations per batch
 DELAY_BETWEEN_RUNS = 1                   # seconds to wait between runs
 # -----------------------------------------------------------
 
@@ -60,8 +61,13 @@ def type_into(el, text):
 def register_once():
     opts = webdriver.ChromeOptions()
     opts.add_argument("--incognito")
+    if HEADLESS:
+        opts.add_argument("--headless=new")
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        opts.add_argument("--disable-gpu")
+    opts.add_argument("--window-size=1280,1600")
     driver = webdriver.Chrome(options=opts)
-    driver.maximize_window()
     user = make_user()
     try:
         driver.get(URL)
