@@ -1,8 +1,3 @@
-"""
-Registration form tester (Selenium, Chrome incognito).
-Install:  pip install selenium
-(Selenium 4.6+ downloads the matching chromedriver automatically.)
-"""
 import random
 import string
 import time
@@ -13,22 +8,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-# ------------------- CONFIG: edit these -------------------
-URL = "https://adselect.org/register"   # your registration page
-SPONSOR = "trivo08"      # must be a real sponsor on your site
+
+URL = "https://adselect.org/register"  
+SPONSOR = "trivo08"      
 COUNTRY = "Zimbabwe"
-PHONE_PREFIX_LEN = 0                     # the +263 is already shown by the page
-EMAIL_DOMAIN = "example.com"             # use a domain you control if the server validates it
-SUCCESS_TEXT = "success"                 # text that appears on success (case-insensitive)
-SUCCESS_URL_PART = ""                    # or a URL fragment after redirect, e.g. "/dashboard"
-HEADLESS = True                          # True on a server with no screen, False on your PC to watch it
-BATCH_SIZE = 10                          # registrations per batch
-DELAY_BETWEEN_RUNS = 1                   # seconds to wait between runs
-# -----------------------------------------------------------
+PHONE_PREFIX_LEN = 0                    
+EMAIL_DOMAIN = "example.com"            
+SUCCESS_TEXT = "success"                 
+SUCCESS_URL_PART = ""                    
+HEADLESS = True                          
+BATCH_SIZE = 10                          
+DELAY_BETWEEN_RUNS = 1                   
 
-FIRST = ["Tendai", "Rudo", "Farai", "Chipo", "Tatenda", "Nyasha", "Kudzai", "Tino"]
-LAST = ["Moyo", "Ncube", "Dube", "Sibanda", "Chikwanha", "Mutasa", "Zhou", "Gumbo"]
-
+FIRST = ["Cipher", "Null", "Ghost", "Zero", "Glitch", "Byte", "Daemon", "Vortex"]
+LAST = ["Nexus", "Void", "Matrix", "Phantom", "Hex", "Protocol", "Krypton", "Spectre"]
 
 def make_user():
     tag = uuid.uuid4().hex[:8]
@@ -85,20 +78,20 @@ def register_once():
         type_into(field(driver, "Password"), user["password"])
         type_into(field(driver, "Confirm Password"), user["password"])
 
-        # Terms checkbox
+        
         box = driver.find_element(By.CSS_SELECTOR, "input[type='checkbox']")
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", box)
         if not box.is_selected():
             driver.execute_script("arguments[0].click();", box)
 
-        # Submit
+        
         btn = driver.find_element(
             By.XPATH, "//button[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'create account')]"
         )
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", btn)
         btn.click()
 
-        # Wait for result
+        
         time.sleep(4)
         shot = f"debug_{user['username']}.png"
         driver.save_screenshot(shot)
@@ -120,7 +113,7 @@ def register_once():
             pass
         return False
     finally:
-        driver.quit()  # closes the incognito window
+        driver.quit()  
 
 
 if __name__ == "__main__":
