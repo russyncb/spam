@@ -18,11 +18,11 @@ URL = "https://adselect.org/register"   # your registration page
 SPONSOR = "trivo08"      # must be a real sponsor on your site
 COUNTRY = "Zimbabwe"
 PHONE_PREFIX_LEN = 0                     # the +263 is already shown by the page
-EMAIL_DOMAIN = "example.co.zw"             # use a domain you control if the server validates it
+EMAIL_DOMAIN = "example.com"             # use a domain you control if the server validates it
 SUCCESS_TEXT = "success"                 # text that appears on success (case-insensitive)
 SUCCESS_URL_PART = ""                    # or a URL fragment after redirect, e.g. "/dashboard"
 HEADLESS = True                          # True on a server with no screen, False on your PC to watch it
-BATCH_SIZE = 20                          # registrations per batch
+BATCH_SIZE = 10                          # registrations per batch
 DELAY_BETWEEN_RUNS = 1                   # seconds to wait between runs
 # -----------------------------------------------------------
 
@@ -99,14 +99,25 @@ def register_once():
         btn.click()
 
         # Wait for result
-        time.sleep(3)
+        time.sleep(4)
+        shot = f"debug_{user['username']}.png"
+        driver.save_screenshot(shot)
+        body = driver.find_element(By.TAG_NAME, "body").text
+        print("URL after submit:", driver.current_url)
+        print("Visible text after submit:\n", body[:600])
+        print("Screenshot saved:", shot)
         page = driver.page_source.lower()
         ok = (SUCCESS_URL_PART and SUCCESS_URL_PART in driver.current_url) or SUCCESS_TEXT.lower() in page
         print("\nSUCCESS" if ok else "\nFAILED / no success message found")
         print("Used:", user)
         return ok
     except Exception as e:
-        print("ERROR:", e)
+        print("ERROR at a step:", repr(e)[:400])
+        try:
+            driver.save_screenshot(f"error_{user['username']}.png")
+            print("Error screenshot saved. URL:", driver.current_url)
+        except Exception:
+            pass
         return False
     finally:
         driver.quit()  # closes the incognito window
