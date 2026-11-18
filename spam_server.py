@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
 
-URL = "https://adselect.org/register"  
+URL = "https://"  
 SPONSOR = "trivo08"      
 COUNTRY = "Zimbabwe"
 PHONE_PREFIX_LEN = 0                    
